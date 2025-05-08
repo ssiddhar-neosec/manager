@@ -14,3 +14,4 @@ export * from './support';
 export * from './vlans';
 export * from './vpcs';
 export * from './volumes';
+export * from './waf';

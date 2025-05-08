@@ -131,6 +131,14 @@ const Profile = React.lazy(() =>
 const SupportTickets = React.lazy(
   () => import('src/features/Support/SupportTickets')
 );
+
+const NewSubsectionOne = React.lazy(
+  () => import('src/features/NewSection/NewSubsectionOne')
+);
+
+const NewSubsectionTwo = React.lazy(
+  () => import('src/features/NewSection/NewSubsectionTwo')
+);
 const SupportTicketDetail = React.lazy(() =>
   import('src/features/Support/SupportTicketDetail/SupportTicketDetail').then(
     (module) => ({
@@ -371,6 +379,14 @@ export const MainContent = () => {
                             <Route component={Account} path="/account" />
                             <Route component={Profile} path="/profile" />
                             <Route component={Help} path="/support" />
+                            <Route
+                              component={NewSubsectionOne}
+                              path="/new-subsection-1"
+                            />
+                            <Route
+                              component={NewSubsectionTwo}
+                              path="/new-subsection-2"
+                            />
                             <Route component={SearchLanding} path="/search" />
                             <Route component={EventsLanding} path="/events" />
                             {isDatabasesEnabled && (

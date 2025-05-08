@@ -58,6 +58,8 @@ export * from './iam';
 
 export * from './entities';
 
+export * from './waf';
+
 export {
   baseRequest,
   setToken,

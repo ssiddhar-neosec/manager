@@ -51,6 +51,8 @@ export type NavEntity =
   | 'Metrics'
   | 'Monitor'
   | 'NodeBalancers'
+  | 'New Subsection'
+  | 'New Subsection 2'
   | 'Object Storage'
   | 'Placement Groups'
   | 'StackScripts'
@@ -62,6 +64,7 @@ export type ProductFamily =
   | 'Databases'
   | 'Monitor'
   | 'More'
+  | 'New Section'
   | 'Networking'
   | 'Storage';
 
@@ -220,6 +223,20 @@ export const PrimaryNav = (props: PrimaryNavProps) => {
           },
         ],
         name: 'Databases',
+      },
+      {
+        icon: <Database />,
+        links: [
+          {
+            display: 'New Subsection',
+            href: '/new-subsection-1',
+          },
+          {
+            display: 'New Subsection 2',
+            href: '/new-subsection-2',
+          },
+        ],
+        name: 'New Section',
       },
       {
         icon: <Monitor />,
