@@ -1,37 +1,19 @@
+import { useWafConfigs } from '@linode/queries';
 import React from 'react';
-import { LandingHeader } from 'src/components/LandingHeader';
+
 import { DebouncedSearchTextField } from 'src/components/DebouncedSearchTextField';
+import { LandingHeader } from 'src/components/LandingHeader';
+import { Table } from 'src/components/Table';
+import { TableBody } from 'src/components/TableBody';
+import { TableCell } from 'src/components/TableCell';
 import { TableHead } from 'src/components/TableHead';
 import { TableRow } from 'src/components/TableRow';
-import { TableCell } from 'src/components/TableCell';
-import { TableBody } from 'src/components/TableBody';
 import { TableRowEmpty } from 'src/components/TableRowEmpty/TableRowEmpty';
-import { Table } from 'src/components/Table';
 export const NewSubsectionTwo = () => {
   const onSearch = (_searchString: string) => {};
-  // Dummy data
-  const wafConfigurations = {
-    data: [
-      {
-        name: 'WAF Config Alpha',
-        status: 'Active',
-        nodeName: 'Node-1',
-        deployedOn: '2025-05-05',
-      },
-      {
-        name: 'WAF Config Beta',
-        status: 'Inactive',
-        nodeName: 'Node-2 | Node-3',
-        deployedOn: '2025-04-22',
-      },
-      {
-        name: 'WAF Config Gamma',
-        status: 'Deploying',
-        nodeName: 'Node-4',
-        deployedOn: '2025-05-01',
-      },
-    ],
-  };
+
+  const { data: wafConfigurations } = useWafConfigs();
+
   return (
     <>
       <LandingHeader
@@ -62,12 +44,12 @@ export const NewSubsectionTwo = () => {
           {wafConfigurations?.data.length === 0 && (
             <TableRowEmpty colSpan={6} />
           )}
-          {wafConfigurations?.data.map((wafConfiguration, idx) => (
+          {wafConfigurations?.data.map((wafConfiguration: any, idx: number) => (
             <TableRow key={idx}>
               <TableCell>{wafConfiguration.name}</TableCell>
               <TableCell>{wafConfiguration.status}</TableCell>
-              <TableCell>{wafConfiguration.nodeName}</TableCell>
-              <TableCell>{wafConfiguration.deployedOn}</TableCell>
+              <TableCell>{`nodebalancer-${idx + 1}`}</TableCell>
+              <TableCell>{wafConfiguration.update_dt}</TableCell>
             </TableRow>
           ))}
         </TableBody>

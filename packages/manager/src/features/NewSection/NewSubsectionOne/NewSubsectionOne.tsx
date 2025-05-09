@@ -1,36 +1,37 @@
-import * as React from 'react';
-import { Paper, Box, Typography, TextField, Checkbox } from '@linode/ui';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { useWafConfigs, useCreateWafConfig } from '@linode/queries';
+import { useCreateWafConfig } from '@linode/queries';
+import { Box, Checkbox, Paper, TextField, Typography } from '@linode/ui';
 import { useEffect } from 'react';
+import * as React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
-interface wafFormData {
-  wafName: string;
-  isProtectionsEnabled: boolean;
-  isCustomRulesEnabled: boolean;
+import type { SubmitHandler } from 'react-hook-form';
+
+interface WafConfigForm {
   includeAllHostnames: boolean;
+  isCustomRulesEnabled: boolean;
+  isProtectionsEnabled: boolean;
+  name: string;
 }
 
 export const NewSubsectionOne = () => {
   const createWafConfigMutation = useCreateWafConfig();
 
-  const { handleSubmit, control, setValue } = useForm<wafFormData>();
-  const onSubmit: SubmitHandler<wafFormData> = (data) => {
-    createWafConfigMutation.mutate(transformData(data));
+  const { control, handleSubmit, setValue } = useForm<WafConfigForm>();
+  const onSubmit: SubmitHandler<WafConfigForm> = (data) => {
+    createWafConfigMutation.mutate(getWafConfigDTO(data));
   };
 
-  const transformData = (formData: wafFormData): any => {
+  const getWafConfigDTO = (formData: WafConfigForm): any => {
     return {
-      wafName: formData.wafName,
-      isProtectionsEnabled: formData.isProtectionsEnabled,
-      isCustomRulesEnabled: formData.isCustomRulesEnabled,
       hostnames: formData.includeAllHostnames
         ? [{ host: '*' }]
         : [{ host: 'akamai.com' }, { host: 'test.akamai.com' }],
+      is_custom_rules_enabled: formData.isCustomRulesEnabled,
+      is_protections_enabled: formData.isProtectionsEnabled,
+      name: formData.name,
+      status: 'ACTIVE',
     };
   };
-
-  const { data } = useWafConfigs();
 
   useEffect(() => {
     setValue('isProtectionsEnabled', false);
@@ -39,26 +40,25 @@ export const NewSubsectionOne = () => {
 
   return (
     <div>
-      react query {data}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Paper
           sx={{
             marginBottom: '20px',
           }}
         >
-          <Box display="flex" flexDirection="column" alignItems="flex-start">
+          <Box alignItems="flex-start" display="flex" flexDirection="column">
             <Typography variant="h2">1. Enter your WAF name</Typography>
             <Controller
               render={({ field }) => (
                 <TextField
                   label=""
+                  onChange={field.onChange}
                   placeholder="enter waf name"
                   value={field.value}
-                  onChange={field.onChange}
                 />
               )}
               control={control}
-              name="wafName"
+              name="name"
             />
           </Box>
         </Paper>
@@ -67,28 +67,28 @@ export const NewSubsectionOne = () => {
             marginBottom: '20px',
           }}
         >
-          <Box display="flex" flexDirection="column" alignItems="flex-start">
+          <Box alignItems="flex-start" display="flex" flexDirection="column">
             <Typography variant="h2">
               2. Configure your WAF protections
             </Typography>
-            <Box display="flex" alignItems="center">
+            <Box alignItems="center" display="flex">
               <Controller
                 render={({ field }) => (
-                  <Checkbox value={field.value} onChange={field.onChange} />
+                  <Checkbox onChange={field.onChange} value={field.value} />
                 )}
-                name="isProtectionsEnabled"
                 control={control}
-              ></Controller>
+                name="isProtectionsEnabled"
+              />
               <Typography variant="h2">Protections</Typography>
             </Box>
-            <Box display="flex" alignItems="center">
+            <Box alignItems="center" display="flex">
               <Controller
                 render={({ field }) => (
-                  <Checkbox value={field.value} onChange={field.onChange} />
+                  <Checkbox onChange={field.onChange} value={field.value} />
                 )}
-                name="isCustomRulesEnabled"
                 control={control}
-              ></Controller>
+                name="isCustomRulesEnabled"
+              />
               <Typography variant="h2">Custom rules</Typography>
             </Box>
           </Box>
@@ -100,14 +100,14 @@ export const NewSubsectionOne = () => {
         >
           <Box display="flex" flexDirection="column">
             <Typography variant="h2">3. Define Protected Resources</Typography>
-            <Box display="flex" flexDirection="row" alignItems="center">
+            <Box alignItems="center" display="flex" flexDirection="row">
               <Controller
                 render={({ field }) => (
-                  <Checkbox value={field.value} onChange={field.onChange} />
+                  <Checkbox onChange={field.onChange} value={field.value} />
                 )}
-                name="includeAllHostnames"
                 control={control}
-              ></Controller>
+                name="includeAllHostnames"
+              />
               <Typography variant="h2">Include all hostnames</Typography>
             </Box>
           </Box>
@@ -121,7 +121,7 @@ export const NewSubsectionOne = () => {
             <Typography variant="h2">4. Summary</Typography>
           </Box>
         </Paper>
-        <input type="submit"></input>
+        <input type="submit" />
       </form>
     </div>
   );
